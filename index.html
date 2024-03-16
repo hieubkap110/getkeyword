@@ -220,7 +220,7 @@
               const newDataArray = JSON.parse(jsonData.value);
 
               if (Array.isArray(newDataArray)) {
-                data.value = newDataArray;
+                data.value = [...data.value, ...newDataArray];
                 jsonData.value = "";
               } else {
                 alert("Dữ liệu không phải là một mảng.");
