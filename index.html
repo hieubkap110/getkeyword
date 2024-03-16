@@ -43,7 +43,6 @@
       <div class="row">
         <div class="col-md-12">
           <form id="data-form">
-            <label for="json-input" class="form-label">Dữ liệu JSON:</label>
             <textarea
               class="form-control"
               v-model="jsonData"
@@ -88,7 +87,7 @@
                       Keyword
                     </th>
                     <th class="sortable hovered" @click="sortData('relevance')">
-                      Relevance
+                      Mức độ cạnh tranh
                       <span v-if="sortColumn === 'relevance'"
                         >{{ sortOrder === 'asc' ? '▲' : '▼' }}</span
                       >
@@ -97,7 +96,7 @@
                       class="sortable hovered"
                       @click="sortData('search_volume')"
                     >
-                      Search Volume
+                      Mức độ tìm kiếm
                       <span v-if="sortColumn === 'search_volume'"
                         >{{ sortOrder === 'asc' ? '▲' : '▼' }}</span
                       >
@@ -123,7 +122,7 @@
         </div>
 
         <div class="col-md-6" v-if="selectedKeywords.length > 0">
-            <h3>Chuyển đổi thành Hashtag:</h3>
+          <h3>Các keyword đã chọn:</h3>
           <div class="mt-3">
             <label for="hashtag-options" class="form-label"
               >Chọn cách chuyển đổi:</label
@@ -178,7 +177,6 @@
               v-model="hashtagsString"
               rows="5"
               cols="50"
-              readonly
             ></textarea>
           </div>
           <hr />
@@ -297,7 +295,7 @@
             );
 
             selectedHashtags.value.push(...uniqueHashtags);
-            hashtagsString.value = selectedHashtags.value.join(", ");
+            hashtagsString.value = selectedHashtags.value.join(" ");
           };
 
           watch(
