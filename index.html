@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="row mt-3">
-        <!-- <div class="col-md-6">
+        <div class="col-md-6">
           <div class="mt-3">
             <label for="relevance-filter" class="form-label"
               >Lọc theo Relevance:</label
@@ -73,9 +73,10 @@
               @change="filterData"
               id="relevance-filter"
             >
-              <option value="">-- Chọn mức Relevance --</option>
-              <option value="3+">Relevance từ 3 trở lên</option>
-              <option value="2+">Relevance từ 2 trở lên</option>
+              <option value="">-- Chọn mức độ cạnh tranh --</option>
+              <option v-for="(i, index ) in 10" :value="`${index + 1}+`">
+                Mức độ cạnh tranh từ {{ index + 1}} trở lên
+              </option>
             </select>
           </div>
 
@@ -84,6 +85,7 @@
               <table class="table">
                 <thead>
                   <tr>
+                    <th>STT</th>
                     <th class="sortable hovered" @click="sortData('keyword')">
                       Keyword
                     </th>
@@ -112,15 +114,16 @@
                     @click="selectKeyword(item.keyword)"
                     :class="{ selected: selectedKeywords.includes(item.keyword) }"
                   >
+                    <td>{{index + 1}}</td>
                     <td>{{ item.keyword }}</td>
-                    <td>{{ item.relevance }}</td>
-                    <td>{{ item.search_volume }}</td>
+                    <td class="text-center">{{ item.relevance }}</td>
+                    <td class="text-center">{{ item.search_volume }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <div class="col-md-6" v-if="selectedKeywords.length > 0">
           <h3>Các keyword đã chọn:</h3>
@@ -221,7 +224,19 @@
               const newDataArray = JSON.parse(jsonData.value);
 
               if (Array.isArray(newDataArray)) {
-                data.value = [...data.value, ...newDataArray];
+                // Tạo một Set mới từ các từ khóa hiện có trong mảng data
+                const existingKeywords = new Set(
+                  data.value.map((item) => item.keyword)
+                );
+
+                // Lọc ra các từ khóa mới không trùng lặp với các từ khóa đã có
+                const uniqueKeywords = newDataArray.filter(
+                  (item) => !existingKeywords.has(item.keyword)
+                );
+
+                // Thêm các từ khóa mới vào mảng data
+                data.value.push(...uniqueKeywords);
+
                 jsonData.value = "";
               } else {
                 alert("Dữ liệu không phải là một mảng.");
@@ -237,10 +252,10 @@
             if (filterValue === "") {
               return data.value;
             } else {
-              if (filterValue === "3+") {
-                return data.value.filter((item) => item.relevance >= 3);
-              } else if (filterValue === "2+") {
-                return data.value.filter((item) => item.relevance >= 2);
+              for (let index = 1; index <= 10; index++) {
+                if (filterValue === `${index}+`) {
+                  return data.value.filter((item) => item.relevance >= index);
+                }
               }
             }
           });
