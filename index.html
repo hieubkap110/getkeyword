@@ -224,18 +224,14 @@
               const newDataArray = JSON.parse(jsonData.value);
 
               if (Array.isArray(newDataArray)) {
-                // Tạo một Set mới từ các từ khóa hiện có trong mảng data
-                const existingKeywords = new Set(
-                  data.value.map((item) => item.keyword)
-                );
 
-                // Lọc ra các từ khóa mới không trùng lặp với các từ khóa đã có
-                const uniqueKeywords = newDataArray.filter(
-                  (item) => !existingKeywords.has(item.keyword)
-                );
+                const uniqueItems = newDataArray.filter((newItem) => {
+                  return !data.value.some((item) => {
+                    return item.keyword === newItem.keyword;
+                  });
+                });
 
-                // Thêm các từ khóa mới vào mảng data
-                data.value.push(...uniqueKeywords);
+                data.value.push(...uniqueItems);
 
                 jsonData.value = "";
               } else {
